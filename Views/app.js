@@ -16,6 +16,8 @@ Ext.onReady(function () {
             }
         },
         autoLoad: true,
+        asynchronousLoad: true,
+        autoSync: true,
         remoteSort: true
     });
 
@@ -53,17 +55,21 @@ Ext.onReady(function () {
                 handler: function () {
                     let form = this.up('form'); // get the form panel
                     let data = form.getForm().getValues();
+                    let backend;
                     Ext.Ajax.request({
                         url: 'http://localhost:3000/api/post',
                         method: "POST",
                         jsonData: data,
-                        success: function () {
+                        success: function (response) {
                             console.log('Данные отправлены: ', data)
+                            console.log('Ответ от сервера: ', JSON.parse(response.responseText))
                         },
-                        failure: function () {
+                        failure: function (response) {
                             console.log('Хьюстон у нас проблемы с: ', data)
+                            console.log('Ответ от сервера: ', JSON.parse(response.responseText))
                         }
                     })
+                    store.reload()
              }
             }]
         }],
